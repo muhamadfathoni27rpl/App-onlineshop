@@ -1,0 +1,52 @@
+<%- include('custom/header'); %>
+<title>Keranjang || WebNode</title>
+<%- include('custom/navbar'); %>
+<% if(message){ %>
+    <div style="text-align: center" class="alert alert-<%= message.type %>">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong><%= message.intro %></strong> <%= message.message %>
+    </div>
+  <% } %>
+ <div style="text-align: center;">
+    <i style="font-size: 120px;" class="fas fa-shipping-fast"></i> 
+    <%if(data==''){%>
+      <h1 style="font-weight: bold; text-align: center;">Tidak Ada Pesanan</h1>
+            <%}else{%>   
+    <h1 style="font-weight: bold;">Status Pengiriman</h1>
+</div>
+
+<table class="table">
+    <thead class="thead-dark">
+      <tr>        
+        <th scope="col" style="text-align: center;">Pesanan</th>
+        <th scope="col-xs-12">Status</th>        
+      </tr>
+    </thead>
+    <tbody>
+
+        <% for(var i=0; i < data.length; i++) { %>                
+      <tr>
+        <td><%= data[i].barang %></td>
+        
+        
+            <%if(base == 0){ %>
+                
+            <th scope="row"><i class="fas fa-box" style="color: blue;"> Mengemas</i></th>        
+
+            <% }else if(base == 1){ %>
+
+            <th scope="row">Mengirim</th>        
+
+            <% }else{%>
+
+            <th scope="row">sudah terkirim</th>        
+            <%}%>
+    
+      </tr>
+      <%}%>
+    <%}%>
+    </tbody>
+  </table>
+  
+
+  </table>

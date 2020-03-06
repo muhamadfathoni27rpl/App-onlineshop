@@ -1,0 +1,158 @@
+<%- include('custom/header'); %>
+<title>Barang || WebNode</title>
+<%- include('custom/navbar'); %>
+      <h2 style="text-align: center;">Barang Anda</h2>
+      <% if(message){ %>
+        <div style="text-align: center" class="alert alert-<%= message.type %>">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong><%= message.intro %></strong> <%= message.message %>
+        </div>
+      <% } %>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambah">Tambah Barang</button>      
+      <div style="margin-left: auto; margin-top: 10px;" class="row">
+        <% for(var i=0; i < ok.length; i++) { %>   
+          <div class="card border border-dark" style="width: 18rem;">            
+            <img class="card-img-top" style="height: 200px;" src="/uploads/<%=ok[i].foto %>" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title"><%= ok[i].barang%></h5>
+              <h6 class="card-subtitle mb-2 text-muted"><%= ok[i].harga%></h6>
+              <p class="card-text">Stok barang : <strong><%= ok[i].stok%></strong></p>              
+              <button style="width: 100%; text-align:center; margin-top: 10px;" type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#update" data-whatever="<%= ok[i].barang%>"><i class="far fa-edit"></i> Edit</button>
+              <form action="/user/hapus/<%= ok[i].uuid_barang %>" id="haposKer" method="POST">                                                                                                                                                                                
+                <button style="width: 100%; text-align:center;" id="hapos" type="submit" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i> Hapus</button>
+              </form>
+              <script>
+              $(document).on('click', '#hapos', function(e) {
+                e.preventDefault();
+                swal({
+              title: "Apakah yakin ?",
+              text: "Barang Akan dihapus dari keranjang ",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+              })
+              .then((willDelete) => {
+              if (willDelete) {
+                swal("Berhasil menghapus barang dari keranjang", {
+                icon: "success",
+                }).then(function (result) {
+                    $('#haposKer').submit();});	
+              }
+              else {
+                swal("Dibatalkan");
+                return false;
+              }
+              });	
+            });
+            </script>
+                                        <!-- MODAL -->
+                                        <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="label">Update barang </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                <input type="file" id="file1" name="image" accept="image/*" capture style="display:none"/>
+<img src="http://macgroup.org/blog/wp-content/uploads/2011/10/iphone-camera-icon-150x150.jpg" id="upfile1" style="cursor:pointer" />
+                                                <form action="/user/update_barang" method="POST">
+                                                  <div class="form-group">                                                    
+                                                    <input type="hidden" name="barang_1" class="data_kr" id="recipient-name">
+                                                  </div>
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Nama Barang </label>
+                                                    <input type="text" required name="barang_2" class="form-control" id="recipient-name" placeholder="Nama Barang">                             
+                                                  </div>                                                  
+                                                    <div class="input-group mb-3">
+                                                      <div class="input-group-prepend">
+                                                        <span class="input-group-text">Rp.</span>
+                                                      </div>
+                                                      <input type="number" required name="harga" class="form-control" id="recipient-name" placeholder="Harga barang">                                                                                 
+                                                    </div>                                                                                                    
+                                                  <div class="form-group">
+                                                    <label class="col-form-label" for="cars">Pilih kategori :</label>
+                                                        <select class="form-control" id="cars">
+                                                          <option value="1">Elektronik</option>
+                                                          <option value="2">Militer</option>
+                                                          <option value="3">Perlengkapan Rumah Tangga</option>
+                                                          <option value="4">Olahraga</option>
+                                                        </select>                                                                                                        
+                                                  </div>
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Stok Barang </label>
+                                                    <input type="number" required name="stok" class="form-control" id="recipient-name" placeholder="Stok Barang">                             
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                    <input type="submit" class="btn btn-warning" value="Update Data">
+                                                  </div>
+                                                </form>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <!-- MODAL --> 
+            </div>
+          </div>   
+           <% } %>              
+      </div>                                                   
+    <div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Tambah Barang</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form action="/user/barang" method="POST" enctype="multipart/form-data">
+                                      
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label">Nama Barang </label>
+                        <input type="text" required name="barang" class="form-control" id="recipient-name" placeholder="Nama Barang">                             
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Detail Barang</label>
+                        <textarea name="deskripsi" class="form-control rounded-0" id="exampleFormControlTextarea1" rows="10"></textarea>
+                      </div> 
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Rp.</span>
+                        </div>
+                        <input type="number" required name="harga" class="form-control" id="recipient-name" placeholder="Harga barang">                                                                                 
+                      </div>
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label">Kategori Barang </label>
+                        <input type="" required name="kategori" class="form-control" id="recipient-name" placeholder="Kategori Barang">                             
+                      </div>
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label">Stok Barang </label>
+                        <input type="number" required name="stok" class="form-control" id="recipient-name" placeholder="Stok Barang">                             
+                      </div>   
+                      <div class="form-group">                   
+                        <label for="message-text" class="col-form-label">Pilih Gambar </label>
+                        <input type="file" required name="gbr_brg" class="custom-file-input" id="validatedCustomFile"/>									                        
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <input type="submit" class="btn btn-primary" value="Tambah Data">
+                      </div>                                  
+                </form>
+             </div>                    
+          </div>
+      </div>
+</body>
+<script>
+  $('#update').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget)  
+  var recipient = button.data('whatever')
+  var modal = $(this)
+  modal.find('.modal-title').text('Update barang ' + recipient)
+  modal.find('.data_kr').val(recipient)
+})
+</script>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="modal.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Hind&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  </head>
+  <body>
+    <div class="login-form">
+      <div class="logo"><img src="/images/home.png" alt="MrToni"></div>
+      <div class="social-media">
+        <button onclick="window.open('https://www.facebook.com/Theshaco')" class="fb"><img src="images/fb.png" alt=""></button>
+        <button onclick="window.open('https://www.instagram.com/mhmdfathoni_')" class="google"><img src="images/ig.png" style="width: 30px;" alt=""></button>
+        <button onclick="window.open('https://www.youtube.com/channel/UC19qx6ql9jrzrjQYFQVTJgQ')" style="background: rgb(250, 146, 146);"><img src="images/yt.png" style="width: 50px;" alt=""></button>
+        <button onclick="window.open('https://github.com/muhamadfathoni27rpl')" class="git"><img src="images/git.png" style="width: 50px;" alt=""></button>
+      </div>
+      <h6>Masuk</h6>     
+      <form action="/user/login" method="POST">
+        <div class="textbox">
+          <input type="text" autocomplete="off" placeholder="Email" name="email">
+          <span class="check-message hidden">Required</span>
+        </div>
+
+        <div class="textbox">
+          <input type="password" placeholder="Password" name="pw">
+          <span class="check-message hidden">Required</span>
+        </div>
+
+        <div class="options">
+          <label class="remember-me">
+            <span class="checkbox">
+              <input type="checkbox">
+              <span class="checked"></span>
+            </span>
+            Remember me
+          </label>
+
+          <a href="#lalipw">Lupa Password </a>
+        </div>
+
+        <input type="submit" value="Masuk" class="login-btn" disabled>
+        <div class="privacy-link">
+          <a href="#">Privacy Policy</a>
+        </div>
+      </form>
+
+      <div class="dont-have-account">
+        Belum punya akun ?
+        <a href="#daftar">Daftar</a>
+      </div>
+    </div>
+
+
+
+
+    <div class="modal" id="lalipw">
+      <div class="modal__dialog">            
+          <section class="modal__content">
+              <header class="modal__header">
+                  <h2 class="modal__title" style="text-align: center;">Lupa Password</h2>
+                  <a href="#" class="modal__close">&times;</a>
+              </header>                
+              <div class="modal__body">                  
+                      <form action="/user/lupa_password" method="POST">                                           
+                        <div class="texts">
+                          <input type="email" name="email" autocomplete="off" placeholder="Email">                          
+                        </div>
+                        <div class="submit">
+                          <input type="submit" style="margin-top: 50px;" value="Reset Password" class="lali-btn" disabled onclick="return Validate()">
+                        </div>
+                      </form>    
+                </div>                        
+          </section>        
+      </div>
+  </div>
+
+
+    <div class="modal" id="daftar">
+        <div class="modal__dialog">            
+            <section class="modal__content">
+                <header class="modal__header">
+                    <h2 class="modal__title" style="text-align: center;">Membuat Akun</h2>
+                    <a href="#" class="modal__close">&times;</a>
+                </header>                
+                <div class="modal__body">
+                    <form action="/user/regis" method="POST">        
+                        <div class="textbok">
+                            <input  type="text" name="nama" autocomplete="off" placeholder="Nama" /> 
+                            <span class="check-message hidden">dibutuhkan</span>
+                        </div>                
+                        <div class="textbok">
+                            <input type="email" name="email" autocomplete="off" placeholder="Email" />
+                            <span class="check-message hidden">dibutuhkan</span>
+                        </div> 
+                        <div class="textbok">
+                            <input type="password" id="txtPassword" autocomplete="off" name="pw" placeholder="Password" />
+                            <span class="check-message hidden">dibutuhkan</span>
+                        </div> 
+                        <div class="textbok">
+                            <input type="password" id="txtConfirmPassword" autocomplete="off" placeholder="Konfirmasi Password">
+                            <span class="check-message hidden">Tidak sama</span>
+                        </div> 
+                    </div>
+                    <div class="submit">
+                        <input type="submit" style="margin-top: 50px;" value="Daftar" class="daftar-btn" disabled onclick="return Validate()">
+                    </div>                       
+                    </form>                               
+            </section>        
+        </div>
+    </div>
+
+    <script type="text/javascript">
+      $(".textbox input").focusout(function(){
+        if($(this).val() == ""){
+          $(this).siblings().removeClass("hidden");
+          $(this).css("background","#554343");
+        }else{
+          $(this).siblings().addClass("hidden");
+          $(this).css("background","#484848");
+        }
+      });
+
+      $(".textbox input").keyup(function(){
+        var inputs = $(".textbox input");
+        if(inputs[0].value != "" && inputs[1].value){
+          $(".login-btn").attr("disabled",false);
+          $(".login-btn").addClass("active");
+        }else{
+          $(".login-btn").attr("disabled",true);
+          $(".login-btn").removeClass("active");
+        }
+      });
+
+      $(".textbok input").keyup(function(){
+        var password = document.getElementById("txtPassword")
+        var confirmPassword = document.getElementById("txtConfirmPassword")
+        var inputs = $(".textbok input");
+        if(inputs[0].value != "" && inputs[1].value!=""  && inputs[2].value!=""  && inputs[3].value != ""){
+          $(".daftar-btn").attr("disabled",false);
+          $(".daftar-btn").addClass("active");     
+        }else{
+          $(".daftar-btn").attr("disabled",true);
+          $(".daftar-btn").removeClass("active");
+        }
+      });
+
+      $(".texts input").keyup(function(){                
+        var inputs = $(".texts input");
+        if(inputs[0].value != ""){
+          $(".lali-btn").attr("disabled",false);
+          $(".lali-btn").addClass("active");     
+        }else{
+          $(".lali-btn").attr("disabled",true);
+          $(".lali-btn").removeClass("active");
+        }
+      });
+
+      function Validate() {
+        var password = document.getElementById("txtPassword").value;
+        var confirmPassword = document.getElementById("txtConfirmPassword").value;
+        if (password != confirmPassword) {
+            alert("Konfirmasi Password Tidak Sama");
+            return false;
+        }
+        return true;	}
+        document.getElementById('button').addEventListener("click", function() {
+    	document.querySelector('.bg-modal').style.display = "flex";
+    });
+
+    </script>
+    <script type="text/javascript" src="flash/flash-client.js"></script> 
+  </body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Register - Web Node</title>
+    <link rel="stylesheet" href="login.css">    
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>    
+</head>
+<body>    
+</body>   
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="/user/regis" method="POST">
+                <h1>Daftar</h1>                
+                <span>Gunakan Email Aktif</span>
+                <input type="text" name="nama" placeholder="Name" />
+                <input type="email" name="email" placeholder="Email" />
+                <input type="password" id="txtPassword" name="pw" placeholder="Password" />
+                <input type="password" id="txtConfirmPassword" placeholder="Konfirmasi Password">
+                <input type="submit" class="ok" value="Mendaftar" id="btnSubmit" onclick="return Validate()">
+            </form>
+        </div>
+        <div class="form-container sign-in-container">    
+            <form id="lali" action="/user/login" method="POST">
+                <h1>Login</h1>                                
+                <input type="email" name="email" placeholder="Email" />
+                <input type="password" name="pw" placeholder="Password" />                
+                <a href="#" id="button">lupa password ?</a>    
+                <input type="submit" class="ok" value="Masuk">                            
+            </form>            
+            <div class="bg-modal">
+                <div class="modal-contents">            
+                    <div class="close">+</div>                    
+                    <form action="/user/lupa_password" method="POST">   
+                        <h3>Lupa Password</h3>                     
+                        <input class="sss" type="email" name="email" placeholder="E-Mail">
+                        <input type="submit" class="lali" placeholder="Kirim">
+                    </form>            
+                </div>
+            </div>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Hello</h1>
+                    <p>Dengan Mendaftar maka anda sudah menyetujui privasi kami.</p>
+                    <button class="ghost" id="signIn">Login</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Selamat Datang Kembali !</h1>
+                    <p>Silahkan Masuk terlebih dahulu sebelum melanjutkan</p>                    
+                    <button class="ghost" id="signUp">Buat akun</button>
+                </div>
+            </div>
+        </div>
+    </div>    
+  
+</body>
+<script>
+const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const container = document.getElementById('container');
+
+signUpButton.addEventListener('click', () => {
+	container.classList.add("right-panel-active");
+});
+
+signInButton.addEventListener('click', () => {
+	container.classList.remove("right-panel-active");
+});
+function Validate() {
+        var password = document.getElementById("txtPassword").value;
+        var confirmPassword = document.getElementById("txtConfirmPassword").value;
+        if (password != confirmPassword) {
+            alert("Password Confirm Tidak Sama bro");
+            return false;
+        }
+        return true;	}
+        document.getElementById('button').addEventListener("click", function() {
+	document.querySelector('.bg-modal').style.display = "flex";
+});
+
+document.querySelector('.close').addEventListener("click", function() {
+	document.querySelector('.bg-modal').style.display = "none";
+});
+
+</script>
+<script type="text/javascript" src="flash/flash-client.js"></script> 
+</html> -->

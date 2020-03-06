@@ -1,0 +1,21 @@
+<%- include('custom/header'); %>
+<title>Pembayaran || WebNode</title>
+<%- include('custom/navbar'); %>
+<% if(message){ %>
+    <div style="text-align: center" class="alert alert-<%= message.type %>">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong><%= message.intro %></strong> <%= message.message %>
+    </div>
+  <% } %>
+
+  <h1>Pesanan anda</h1>
+  <% for(var i=0; i < data.length; i++) { %>   
+      <p><%= data[i].barang %></p>    
+  <% } %>
+  <%if(oyi == 'bangsat'){%>    
+    <h1>kosong</h1>
+  <%}else{%>
+    <% for(var a=0; a < oyi.length; a++) { %>   
+      <a href="/user/konfir/<%= oyi[a].id_pesan %>">Konfirmasi</a>
+    <% } %>
+  <%}%>

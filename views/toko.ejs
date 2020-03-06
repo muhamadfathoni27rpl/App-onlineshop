@@ -1,0 +1,244 @@
+<%- include('custom/header'); %>
+<link rel="stylesheet" href="modal.css">
+<title>Toko || WebNode</title>
+<%- include('custom/navbar'); %>    
+    <% if(message){ %>
+      <div style="text-align: center" class="alert alert-<%= message.type %>">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong><%= message.intro %></strong> <%= message.message %>
+      </div>
+      <% } %>
+    
+      <div class="container pt-5">
+      <div style="margin-left: auto;" class="row">
+        <% for(var i=0; i < ok.length; i++) { %>   
+          <div class="card border border-dark" style="margin-top: 10px; width: 28rem; height: 35rem; position: center; margin-left: 10px;">
+            <img class="card-img-top" style="height: 300px;" src="/uploads/<%=ok[i].foto %>" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title" style="text-align: center;"><%= ok[i].barang%></h5>
+              <p class="card-text" style="text-align: center;">Rp. <%= ok[i].harga%></p>                  
+              <!-- <p class="card-text">Stok barang : <strong><%= ok[i].stok%></strong></p>                                -->
+              <style>
+                #outer{width:100%;text-align: center; margin-top: 20px;}
+                .inner{display: inline-block;}
+              </style>
+              <div id="outer">
+                <div class="inner">
+              <button type="button" 
+              class="btn btn-outline-secondary" data-toggle="modal" data-target="#dtl"
+              data-barang="<%= ok[i].barang%>" data-foto="/uploads/<%=ok[i].foto %>" 
+              data-desk="<%=ok[i].desk %>" data-bintang="<%=ok[i].total_rate%>"
+              data-wong="<%=ok[i].total_rateWong%>"
+              ><i class="fas fa-eye"></i> Lihat</button></div>
+              <div class="inner"><a href="/user/love/<%=ok[i].uuid_barang%>" class="btn btn-outline-danger"><i class="fas fa-heart"> Favorit</i></a>              </div>
+              <div class="inner"><a href="/user/keranjang_tambah/<%=ok[i].uuid_barang%>" class="btn btn-outline-success"><i class="fa fa-shopping-cart"></i> Keranjang</a>                              </div>
+                </div>
+              <!-- MODAL -->
+              <div class="modal fade" id="dtl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header" style="background-color: black;">
+                      <h5 class="modal-title" style="color: white;" id="label">Detail Barang</h5>
+                      <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+                        <i aria-hidden="true" class="far fa-window-close"></i>                        
+                      </button>
+                    </div>
+                    <div class="container">                      
+                      <h1 class="my-4 brgs">
+                      </h1>                                          
+                      <div class="row">                    
+                        <div class="col-md-8">
+                          <img style="width: 600px; height: 400px;" class="img-fluid border border-dark" alt="gambar">                          
+                          <!-- NILAI -->
+                                  <div style="margin-top: 10px;">                            
+                                    <h3>Rate Barang :</h3>
+                                    <style>
+                                    .fa-star{color:white;}
+                                    .checked{color: orange;}
+                                    .fa-star-half-alt{color: orange;}
+                                    </style>   
+                                    <div class="bintang">
+                                    
+                                    <!-- BINTANG 4,5  -->
+                                      
+                                    </div>         
+                                  <h5 class="wong"></h5>                                            
+                                </div>    
+                          <!-- NILAI -->
+                          <!-- Komentar -->
+                                <div>
+                                  <h5>Komentar Barang :</h5>
+                                </div>
+                          <!-- Komentar -->                        
+                        </div>    
+                        <div style="margin-left: 0;" class="">
+                          <h3 class="my-3">Deskripsi Barang : </h3>
+                          <p class="desk"></p>                          
+                        </div>
+                       
+                      </div>                                                                              
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- MODAL --> 
+              <script>
+                $('#dtl').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var recipient1 = button.data('barang')
+                var recipient2 = button.data('foto')
+                var recipient3 = button.data('desk')
+                var recipient4 = button.data('bintang')
+                var recipient5 = button.data('wong')
+                var modal = $(this)                
+                modal.find('.brgs').text(recipient1)
+                modal.find('.img-fluid').attr("src",recipient2)
+                modal.find('.desk').text(recipient3)
+                if(recipient4 == 0 ){
+                  modal.find('.bintang').html('<span class="fa fa-star"></span>'
+                                              +'<span class="fa fa-star"></span>'
+                                              +'<span class="fa fa-star"></span>'
+                                              +'<span class="fa fa-star "></span>'
+                                              +'<span class="fa fa-star"></span>')
+                }
+                else if(recipient4 >0 && recipient4 <= 0.5){
+                  modal.find('.bintang').html('<span class="fa fa-star-half-alt"></span>'
+                                              +'<span class="fa fa-star"></span>'
+                                              +'<span class="fa fa-star"></span>'
+                                              +'<span class="fa fa-star "></span>'
+                                              +'<span class="fa fa-star"></span>')
+                }
+                else if(recipient4 > 0.5 && recipient4 <=1){
+                  modal.find('.bintang').html('<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star"></span>'
+                                              +'<span class="fa fa-star"></span>'
+                                              +'<span class="fa fa-star "></span>'
+                                              +'<span class="fa fa-star"></span>')
+                }
+                else if(recipient4 > 1 && recipient4 <= 1.5){
+                  modal.find('.bintang').html('<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star-half-alt"></span>'
+                                              +'<span class="fa fa-star"></span>'
+                                              +'<span class="fa fa-star "></span>'
+                                              +'<span class="fa fa-star"></span>')
+                }
+                else if(recipient4 > 1.5 && recipient4 <=2){
+                  modal.find('.bintang').html('<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star"></span>'
+                                              +'<span class="fa fa-star "></span>'
+                                              +'<span class="fa fa-star"></span>')
+                }
+                else if(recipient4 > 2 && recipient4 <= 2.5){
+                  modal.find('.bintang').html('<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star-half-alt"></span>'
+                                              +'<span class="fa fa-star "></span>'
+                                              +'<span class="fa fa-star"></span>')
+                }
+                else if(recipient4 > 2.5 && recipient4 <= 3){
+                  modal.find('.bintang').html('<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star-half-alt"></span>'
+                                              +'<span class="fa fa-star "></span>'
+                                              +'<span class="fa fa-star"></span>')
+                }
+                else if(recipient4 > 3 && recipient4 <= 4.5){
+                  modal.find('.bintang').html('<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star-half-alt"></span>'
+                                              +'<span class="fa fa-star"></span>')
+                }
+                else if(recipient4 > 4.5 && recipient4 <=5){
+                  modal.find('.bintang').html('<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star checked"></span>'
+                                              +'<span class="fa fa-star checked"></span>')
+                }
+                else{
+                  modal.find('.bintang').html('<strong>Belum ada masukan</strong>')                                              
+                }              
+                modal.find('.wong').text(recipient5)
+              })
+              </script>                                                                                                                                                                                                                                                                                                                                                              
+             
+            </div>
+          </div>   
+           <% } %>              
+      </div>    
+    </div>    
+    
+<footer style="margin-top: 10px;">
+	<div class="container-fluid pt-5 bg-dark text-light">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="row">
+						<h5>Meta</h5>
+					</div>
+					<div class="row mb-4">
+						<div class="underline bg-light" style="width: 50px"></div>
+					</div>
+					<p><i class="fa fa-chevron-right" aria-hidden="true"></i> Register</p>
+					<p><i class="fa fa-chevron-right" aria-hidden="true"></i> Log In</p>
+					<p><i class="fa fa-chevron-right" aria-hidden="true"></i> Enter RSS</p>
+					<p><i class="fa fa-chevron-right" aria-hidden="true"></i> Comments</p>
+					<p><i class="fa fa-chevron-right" aria-hidden="true"></i> Webseotips</p>
+				</div>
+				
+				
+				<div class="col-md-3">
+					<div class="row">
+						<h5>Recent Posts</h5>
+					</div>
+					<div class="row mb-4">
+						<div class="underline bg-light" style="width: 50px"></div> 
+					</div>
+					<div class="row">
+						<div class="media">
+							<img src="img/b1.jpg" class="img-fluid" alt="media-image">
+							<div class="media-body ml-2">
+								<h6>ackets For The Soul. What Color Is Yours?</h6>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="media">
+							<img src="img/b2.jpg" class="img-fluid" alt="media-image">
+							<div class="media-body ml-2">
+								<h6>Best Fabrics For Your Dream Dress!</h6>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="col-md-3">
+					<div class="row">
+						<h5>About</h5>
+					</div>
+					<div class="row mb-4">
+						<div class="underline bg-light" style="width: 50px"></div> 
+					</div>
+					<div class="row">
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel inventore quis harum mollitia ex esse obcaecati deserunt alias fuga quia.<br>Vel inventore quis harum mollitia.</p>
+					</div>
+				</div>
+				
+				<div class="col-md-3">
+					<div class="row">
+						<h5>Tags</h5>
+					</div>
+					<div class="row mb-4">
+						<div class="underline bg-light" style="width: 50px"></div> 
+					</div>
+					<button class="btn btn-outline-light">autunm</button> <button class="btn btn-outline-light">Dress</button> <button class="btn btn-outline-light">ladice</button> <button class="btn btn-outline-light">black dressunm</button> <button class="btn btn-outline-light">modern dress</button>
+				</div>
+			</div>
+		</div>
+	</div> 
+</footer>   
+</body>
+</html>

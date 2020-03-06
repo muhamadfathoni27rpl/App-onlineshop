@@ -1,0 +1,14 @@
+<%- include('custom/header'); %>
+<title>Dashboard || WebNode</title>
+<%- include('custom/navbar'); %>
+    <h1 style="text-align: center;">Selamat Datang  <%=data.nama.split("ganteng")%></h1>
+    <div class="text-center">
+      <%if (data.pp == 0) { %>                      
+        <img src="/uploads/kosong.jpg" style="height: 400px;" class="rounded" alt="...">  
+      <% } else{ %>
+        <img src="/uploads/<%=data.pp%>" style="height: 400px;" class="rounded" alt="...">
+      <% } %>
+      </div>
+    <p><%=token%></p>    
+</body>
+</html>

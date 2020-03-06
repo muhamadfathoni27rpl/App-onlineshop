@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ganti Password Baru</title>
+</head>
+<body>
+    <form action="/user/lupa_password/changed" method="POST">
+        <input type="password" name="pw" placeholder="Masukan Password baru"/>
+        <input type="hidden" name="token" value="<%= data %>"/>
+        <input type="submit">
+    </form>
+</body>
+<script type="text/javascript" src="http://localhost:3000/flash/flash-client.js"></script> 
+</html>

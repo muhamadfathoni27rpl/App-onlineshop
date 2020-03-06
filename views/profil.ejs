@@ -1,0 +1,430 @@
+<%- include('custom/header'); %>
+<style>
+       .details li {
+      list-style: none;
+    }
+    li {
+        margin-bottom:10px;
+        
+    }
+</style>
+<title>Profile || WebNode</title>
+<%- include('custom/navbar'); %>
+<div class="container">
+    <% if(message){ %>
+        <div style="text-align: center" class="alert alert-<%= message.type %>">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong><%= message.intro %></strong> <%= message.message %>
+        </div>
+      <% } %>
+        <div style="text-decoration: none;" class="row">
+            <div class="c-sidebar c-sidebar-dark c-sidebar-show">
+                <ul style="list-style-type:none;" class="c-sidebar-nav  nav-stacked admin-menu">
+                  <li class="c-sidebar-nav-item">
+                    <a class="c-sidebar-nav-link" href="" data-target-id="profile">
+                        <i class="fas fa-user-circle"> Profile</i> 
+                    </a>
+                   </li>
+                   <li class="c-sidebar-nav-item">
+                    <a class="c-sidebar-nav-link" href="" data-target-id="ath2">
+                        <i class="fas fa-cog">Login 2Faktor</i>
+                    </a>
+                  </li>                  
+                  <li class="c-sidebar-nav-item">
+                    <a class="c-sidebar-nav-link" href="" data-target-id="change-password">
+                        <i class="fas fa-key"> Ganti Password</i> 
+                    </a>
+                  </li>
+                  <li class="c-sidebar-nav-item">
+                    <a class="c-sidebar-nav-link" href="" data-target-id="gambar">
+                        <i class="fas fa-images"> Foto Profile</i> 
+                    </a>
+                  </li>  
+                  <li class="c-sidebar-nav-item">
+                    <a class="c-sidebar-nav-link" href="" data-target-id="love">
+                        <i class="fab fa-gratipay"> Favorit</i>
+                    </a>
+                  </li>  
+                  <li class="c-sidebar-nav-item">
+                    <form class="c-sidebar-nav-link" id="Metu" action="/user/logout" method="GET">
+                        <button id="metu" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt"> Keluar</i></button>                        
+                    </form>
+                    <script>
+                        $(document).on('click', '#metu', function(e) {
+                            e.preventDefault();
+                            swal({
+                            title: "Apakah yakin ?",
+                            text: "Anda Akan Keluar dari website ",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                            })
+                            .then((willDelete) => {
+                            if (willDelete) {
+                                swal("Anda Akan Dialihkan Ke halaman Login", {
+                                icon: "success",
+                                }).then(function (result) {
+                                $('#Metu').submit();});	
+                            }
+                            else {
+                                swal("Dibatalkan");
+                                return false;
+                            }
+                            });	
+                        });
+                    </script>
+                  </li>                                                       
+                </ul>            
+              </div>
+
+
+              <!-- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$profil -->
+
+
+            <div class="col-md-9  admin-content" id="profile">
+                <div class="jumbotron">
+                    <div class="row">
+                        <div class="col-md-2 col-xs-2 col-sm-6 col-lg-4">
+                            <img src="/uploads/<%=data.pp%>"  style="height: 280px;width: 280px; position: center;" alt="stack photo" class="avatar img-circle border border-white">
+                        </div>
+                        <div class="col-md-6 col-xs-12 col-sm-10 col-lg-10">
+                            <div class="container" style="border-bottom:1px solid black">
+                              <h2><h2><%= data.nama %></h2></h2>
+                            </div>
+                              <hr>
+                            <ul class="container details">
+                                <% if (data.hp == ''){ %>
+                                    <li><p><span class="glyphicon glyphicon-earphone one" style="width:50px;"></span>-</p></li>
+                                      <%}else{%>
+                                        <i class="fas fa-phone-square-alt"> <%= data.hp %></i>                                        
+                                      <% } %>
+                                      <br>
+                                      <i class="fas fa-envelope-square"> <%= data.email %></i>
+                              
+                              <% if (data.alamat == ''){ %>
+                              <li><p><span class="glyphicon glyphicon-map-marker one" style="width:50px;"></span>-</p></li>
+                                <%}else{%>
+                                    <br>
+                                    <i class="fas fa-map-marker-alt"> <%= data.alamat %></i>
+                                <% } %>
+                                <% if (data.web == ''){ %>
+                                    <li><p><span class="glyphicon glyphicon-new-window one" style="width:50px;"></span>-</p>                            
+                                      <%}else{%>
+                                        <br>
+                                        <i class="fas fa-blog"><a href="http://<%= data.web %>" target="_blank"> <%= data.web %></a></i>
+                                      <% } %>
+                              <br><br>
+                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Edit profil</button>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ath2 -->
+            <div class="col-md-9  admin-content" id="ath2">
+                <% if(data.verif_auth2 != ''){ %>
+                    
+                    <h2 style="color: rgb(67, 105, 230);">Aktif</h2>
+                     <!-- ON -->
+                <form action="/user/detfactor" id="haposKey" method="POST">
+                    <label class="switch">
+                        <input id="hapos" type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </form>
+                <script>
+                    $(document).on('click', '#hapos', function(e) {
+                      e.preventDefault();
+                      swal({
+                    title: "Apakah yakin ?",
+                    text: "2 Login Faktor Akan dinonaktifkan ",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                    if (willDelete) {
+                      swal("Berhasil dinonaktif kan", {
+                      icon: "success",
+                      }).then(function (result) {
+                          $('#haposKey').submit();});	
+                    }
+                    else {
+                      swal("Dibatalkan");
+                      return false;
+                    }
+                    });	
+                  });
+                  </script>
+
+
+
+                  <% } else { %>
+
+                <h2 style="color: rgb(255, 0, 0);">Tidak Aktif</h2>
+                <!-- OFF -->
+                <label class="switch">             
+                    <input type="checkbox" data-target="#2tg">
+                    <span class="slider round"></span>                    
+                  </label>    
+
+                  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>                          
+                        </div>
+                        <div class="modal-body">
+                          <form action="/user/setfactor" method="post">
+                            <h4>Masukan Kata / Benda / Sesuatu Kesukaan Anda : </h4>
+                            <input class="form-control" type="text" name="kata">
+                                <div class="modal-footer">                                    
+                                    <input type="submit" class="btn btn-primary" value="Set UP">
+                                </div>
+                            </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    <script>
+                    $('input[type="checkbox"]').on('change', function(e){
+                        if(e.target.checked){
+                        $('#myModal').modal();
+                        }
+                    });
+                    </script>
+                  <% } %>
+                 <h4 style="color: rgb(224, 35, 35);">Note : </h4>
+                 <h5>Jika Anda Sudah Setting <i>key Factor</i> , Maka Anda Tidak dapat <strong>Mereset</strong> saat anda lupa <i>key Factor</i> tersebut.</h5>
+                 <br><h5>Gunakan Kata yang mudah di ingat menurut anda pribadi.</h5>
+            </div>
+
+
+
+            <!-- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Password -->
+
+
+
+            <div class="col-md-9  admin-content" id="change-password">
+                <form action="/user/pwAnyar" method="post">           
+                    <div class="panel panel-info" style="margin: 1em;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><label for="new_password" class="control-label panel-title">Password baru</label></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" name="password1" id="new_password" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>             
+                    <div class="panel panel-info" style="margin: 1em;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><label for="confirm_password" class="control-label panel-title">Konfirmasi</label></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" name="password2" id="confirm_password" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>           
+                    <div class="panel panel-info border" style="margin: 1em;">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="pull-left">
+                                    <input type="submit" class="form-control btn btn-danger" value="Ganti Password" name="submit" id="submit">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <!-- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$GAMBAR -->
+
+
+
+            <div class="col-md-9  admin-content" id="gambar">
+                <form action="/user/gambar" method="POST"  enctype="multipart/form-data"> 
+                    <div class="panel panel-info" style="margin: 1em;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><label for="pp" class="control-label panel-title">Ganti Gambar</label></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="custom-file">
+                                <label class="custom-file-label" for="pp">Choose file</label>                             
+                                <input type="file" class="custom-file-input" id="pp" name="gambars">   
+                                  
+                              </div>                            
+                        </div>
+                    </div>           
+                    <div class="panel panel-info border" style="margin: 1em;">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="pull-left">
+                                    <input type="submit" class="form-control btn btn-primary" name="submit" id="submit">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+
+
+            <!-- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$love -->
+
+
+            <div class="col-md-9  admin-content" id="love">
+                <h1>Favorit</h1>
+                <table id="cart" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th style="width:50%">Produk</th>
+                            <th style="width:10%">Harga</th>                                                        
+                            <th style="width:10%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>      
+                        <% for(var i=0; i < love.length; i++) { %>                    
+                        <tr>
+                            <td data-th="Product">
+                                <div class="row">
+                                    <div class="col-sm-2 hidden-xs"><img style="width: 100px;" src="/uploads/<%= love[i].gambar %>" alt="Gambar" class="img-responsive"/></div>
+                                    <div class="col-sm-5 hidden-xs" style="margin-left: 50px;"> 
+                                        <h4 class="nomargin"><%= love[i].nama_barang %></h4>								                                                                                   
+                                    </div>
+                                </div>
+                            </td>
+                            <td data-th="Price">Rp.<%= love[i].harga_barang %></td>                                         
+                            <td class="actions" data-th="">                                
+                                <a href="/user/hapus_keranjang/" class="btn btn-danger btn-sm"><i class="fab fa-gratipay"></i></a>								
+                            </td>
+                        </tr>       
+                        <% } %>    
+                    </tbody>	         	                                                        
+                </table>
+            </div>            
+        </div>
+</div>    
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ubah Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/user/profil_ubah" method="POST">
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Nama</label>
+                            <input type="text" name="nama" class="form-control" id="recipient-name" value="<%= data.nama %>">   
+                            <label for="recipient-m" class="col-form-label">Alamat</label>
+                            <input type="text" name="alamat" class="form-control" id="recipient-m" value="<%= data.alamat %>">
+                            <label for="recipient-h" class="col-form-label">Nomer Hp</label>
+                            <input type="text" name="hp" class="form-control" id="recipient-h" value="<%= data.hp %>">                      
+                            <label for="recipient-a" class="col-form-label">Website</label>
+                            <input type="text" name="web" class="form-control" id="recipient-a" value="<%= data.web %>">
+                            <div class="modal-footer">                                
+                                <input type="submit" class="btn btn-success" value="Ubah Profile">
+                              </div>                            
+                        </div>                    
+                    </form>
+                </div>
+                
+                </div>
+            </div>
+            </div>
+</body>
+<script>
+            $(document).ready(function()
+      {
+        var navItems = $('.admin-menu li > a');
+        var navListItems = $('.admin-menu li');
+        var allWells = $('.admin-content');
+        var allWellsExceptFirst = $('.admin-content:not(:first)');
+        allWellsExceptFirst.hide();
+        navItems.click(function(e)
+        {
+            e.preventDefault();
+            navListItems.removeClass('active');
+            $(this).closest('li').addClass('active');
+            allWells.hide();
+            var target = $(this).attr('data-target-id');
+            $('#' + target).show();
+        });
+        });
+</script>
+<style>
+    .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+</html>

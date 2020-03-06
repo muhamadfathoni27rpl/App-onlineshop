@@ -1,0 +1,108 @@
+<%- include('custom/header'); %>
+<title>Keranjang || WebNode</title>
+<%- include('custom/navbar'); %>
+
+ 
+	
+<% if(message){ %>
+	<div style="text-align: center" class="alert alert-<%= message.type %>">
+	  <button type="button" class="close" data-dismiss="alert">&times;</button>
+	  <strong><%= message.intro %></strong> <%= message.message %>
+	</div>
+  <% } %>
+
+<div class="container">
+	<%if(oyi == 0){	  		  %>		
+		<h1 style="text-align: center; margin-top: 150px;">Tidak ada Barang</h1>
+		<h1 style="text-align: center; margin-top: 0px;"><i style="font-size: 150px;" class="fas fa-shopping-cart"></i></h1>		
+			<div style="text-align: center;">
+			 <a style="text-align: center; width: 100px; margin-left: 20px;" class="btn btn-outline-dark" href="/user/toko"><i class="far fa-hand-point-left"> Belanja</i></button></a>	                                                                                                                                                     
+			</div>		
+	<% }else{%>
+		<table id="cart" class="table table-hover table-condensed">
+			<thead>
+				<tr>
+					<th style="width:50%">Produk</th>
+					<th style="width:10%">Harga</th>
+					<th style="width:8%">Jumlah</th>
+					<th style="width:22%" class="text-center">Subtotal</th>
+					<th style="width:10%"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% for(var i=0; i < oyi.length; i++) { %>  
+				<tr>
+					<td data-th="Product">
+						<div class="row">
+							<div class="col-sm-2 hidden-xs"><img style="width: 100px;" src="/uploads/<%=oyi[i].gambar %>" alt="..." class="img-responsive"/></div>
+							<div class="col-sm-5 hidden-xs" style="margin-left: 50px;"> 
+								<h4 class="nomargin"><%= oyi[i].nama_barang %></h4>
+								<p>barang anda</p>
+							</div>
+						</div>
+					</td>
+					<td data-th="Price">Rp.<%= oyi[i].harga %></td>
+					<td data-th="Quantity">
+						<p class="form-control text-center"><%= oyi[i].total_barang %></p>
+					</td>
+	  	<td data-th="Subtotal" class="text-center">
+			Rp. <%= oyi[i].harga_total %>
+	  	</td>
+		<td class="actions" data-th="">			
+			<form id="haposKer" action="/user/hapus_keranjang/<%= oyi[i].id_cart %>" method="GET">
+				<button id="hapos" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
+			</form>			
+		</td>
+	</tr>
+	<% } %>
+  </tbody>	
+  
+			<tfoot>									
+				<tr>							
+					<td><a href="/user/toko" class="btn btn-warning">
+						<i class="fa fa-angle-left"></i> Lanjutkan Belanja</a>
+					</td>
+					<td colspan="2" class="hidden-xs">								  
+					</td>							  							  
+					<td class="hidden-xs text-center">
+						<strong>Total Rp. <%=total.tes%></strong>       								
+					  </td>							  
+					<td>										  			  
+						<form action="/user/chekot/<%= data.nama_pembeli %>" method="POST">
+							<input type="hidden" name="admin" value="<%= data.admin%>%>">
+							<input type="hidden" name="jom" value="<%=total.tes%>">									
+							<input type="submit" class="btn btn-success btn-block" value="Checkout">										
+						</form>																					
+					</td>																													
+				</tr>									
+			</tfoot>	
+												
+</table>		
+	<%}%>
+</div>
+<script>
+$(document).on('click', '#hapos', function(e) {
+    e.preventDefault();
+    swal({
+	title: "Apakah yakin ?",
+	text: "Barang Akan dihapus dari keranjang ",
+	icon: "warning",
+	buttons: true,
+	dangerMode: true,
+	})
+	.then((willDelete) => {
+	if (willDelete) {
+		swal("Berhasil menghapus barang dari keranjang", {
+		icon: "success",
+		}).then(function (result) {
+        $('#haposKer').submit();});	
+	}
+	else {
+		swal("Dibatalkan");
+		return false;
+	}
+	});	
+});
+</script>
+</body>
+
