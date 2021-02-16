@@ -33,6 +33,6 @@
     "sequelize": "^5.21.3",
     "star-ratings": "^1.0.0",
     "sweetalert": "^2.1.2",
-    "systeminformation": "^4.21.2"
+    "systeminformation": "^5.3.1"
   }
 }
